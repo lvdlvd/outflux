@@ -32,7 +32,8 @@ Where
 ### Produce a summary over all records that have a tag 'trid' starting with ~PULSE
 
 ```
-Luuk-van-Dijks-MacBook-Pro:outflux lvd$ gzcat ../dees/data/20240807111458/data.log.gz  | ./outflux trid~PULSE
+$ gzcat ../dees/data/20240807111458/data.log.gz  | ./outflux trid~PULSE
+
 outflux:processed 138231 of 3677327 records.
 MEASUREMENTS:
 	 138231 debug
@@ -58,8 +59,8 @@ outflux:Processed 967617 records in 2.750044167s
 ### Print a histogram of all trid values for fields that have a srcid tag:
 
 ```
-Luuk-van-Dijks-MacBook-Pro:outflux lvd$ gzcat ../dees/data/20240807111458/data.log.gz  | ./outflux srcid= trid | sort | uniq -c
-outflux:skipping record 3677328:tag at line 3677332:36: expected field key but none found
+$ gzcat ../dees/data/20240807111458/data.log.gz  | ./outflux srcid= trid | sort | uniq -c
+
 outflux:processed 2839762 of 3677327 records.
 outflux:Processed 2839762 records in 2.883718084s
    1 #trid
@@ -83,7 +84,8 @@ outflux:Processed 2839762 records in 2.883718084s
 ### Print us, x, y, z fields of all ACCEL_ records from port 4
 
 ```
-Luuk-van-Dijks-MacBook-Pro:outflux lvd$ go build &&  gzcat ../dees/data/20240807111458/data.log.gz  | ./outflux port=2 trid~ACCEL_ us x y z trid 
+$ gzcat ../dees/data/20240807111458/data.log.gz  | ./outflux port=2 trid~ACCEL_ us x y z trid 
+
 #us x y z trid
 0 -1.0073547 0.07662964 -0.0026550293 ACCEL_3G
 5802951255 -1.0081787 0.076812744 -0.0024719238 ACCEL_3G
@@ -97,11 +99,11 @@ Luuk-van-Dijks-MacBook-Pro:outflux lvd$ go build &&  gzcat ../dees/data/20240807
 ....
 ```
 
-
 ### Produce a summary over all records that have a tag 'trid' starting with ~PULSE
 
 ```
-Luuk-van-Dijks-MacBook-Pro:outflux lvd$ go build &&  gzcat ../dees/data/20240807111458/data.log.gz  | ./outflux trid~PULSE us count | head
+$ gzcat ../dees/data/20240807111458/data.log.gz  | ./outflux trid~PULSE us count | head
+
 outflux:processed 138231 of 3677327 records.
 MEASUREMENTS:
 	 138231 debug
@@ -124,83 +126,12 @@ trid:
 outflux:Processed 967617 records in 2.750044167s
 ```
 
-
 ### Produce a summary over all records
 
 ```
-Luuk-van-Dijks-MacBook-Pro:outflux lvd$  gzcat ../dees/data/20240807111458/data.log.gz  | ./outflux
- gzcat ../dees/data/20240807111458/data.log.gz  | ./outflux
-2024/12/27 01:18:20 skipping record 3677328:tag at line 3677332:36: expected field key but none found
+$  gzcat ../dees/data/20240807111458/data.log.gz  | ./outflux
+
 2024/12/27 01:18:20 output 3677328 of 3677327 records.
-MEASUREMENTS:
-	3677328 debug
-RECORD TYPES:
-	  17587 V,d,stamp,us
-	   1097 abrt,badmsg,bufsmall,crc,inv,noframe
-	   5348 alt,alta,cr,d,diffAge,itow,lat,lata,lon,lona,numsv,sbgts,status,stid,type,und,used
-	 106176 alt,alta,cr,d,lat,lata,lon,lona,mode,sbgts,und,used,vD,vDa,vE,vEa,vN,vNa,valid
-	  53389 alt,cr,d,isdelay,pabs,pdif,sbgts,tas,temp,valid
-	 109162 ax,ay,az,cr,d,dax,day,daz,dvx,dvy,dvz,gx,gy,gz,ok,rng,sbgts,temp,tst
-	  54107 ax,ay,az,cr,d,mx,my,mz,ok,rng,sbgts,tst
-	   5372 bl,cr,d,itow,p,pa,sbgts,status,th,tha,valid
-	   1097 brk,buf_overrun,frame,overrun,parity,rx,tx
-	   1120 class,id
-	 133848 count,d,stamp,us
-	   1096 count,wait,wait_max,work,work_max
-	   5402 course,coursea,cr,d,itow,sbgts,status,type,vD,vDa,vE,vEa,vN,vNa
-	   5482 cr,d,fixStat,flags,flags2,gpsFix,iTOW,msss,ttff
-	 107810 cr,d,mode,p,pa,r,ra,sbgts,used,valid,y,ya
-	   2199 d,devid,stamp,us
-	1319424 d,stamp,us,value
-	1330536 d,stamp,us,x,y,z
-	      8 rest
-	...
-ch:
-	 461017 4
-edge_:
-	   2192 1
-	   2191 2
-gpio_:
-	   4383 18
-gps:
-	  19410 1
-port:
-	   7671 0
-	1348186 2
-	1483905 4
-session:
-	3677327 raspberrypi
-srcid:
-	   7671 0
-	1483905 23
-	1348186 92
-start:
-	      1 20240807111459.33007151
-	3677327 20240807111459.330071510
-trid:
-	 444319 ACCEL_3G
-	 443049 BAROP
-	 443048 BAROT
-	   2192 BMPOLL
-	   2193 CANERR
-	 216890 DTS
-	 440542 GYRO_250DEG_S
-	 452251 MAGN
-	   6578 NAVSTATUS
-	  69116 PULSERAISE
-	   2193 RPI
-	  54485 SBGAIR
-	 108906 SBGEULER
-	 110258 SBGIMU
-	  55203 SBGMAG
-	 107272 SBGNAV
-	   1103 SBGREST
-	   2193 TIOCGICOUNT
-	 220178 TS
-	...
-Luuk-van-Dijks-MacBook-Pro:outflux lvd$ go build &&  gzcat ../dees/data/20240807111458/data.log.gz  | ./outflux
-outflux:skipping record 3677328:tag at line 3677332:36: expected field key but none found
-outflux:output 3677328 of 3677327 records.
 MEASUREMENTS:
 	3677328 debug
 RECORD TYPES:
