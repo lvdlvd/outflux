@@ -12,24 +12,25 @@ Usage
 
 Where
 
-		tag=val   only process records that contain this tag with this value.
-		tag=      only process records that contain this tag, irrespective of value
-		tag~pfx   only process records that contain this tag with a value that has this prefix
+    tag=val   only process records that contain this tag with this value.
+    tag=      only process records that contain this tag, irrespective of value
+    tag~pfx   only process records that contain this tag with a value that has this prefix
 
-		tag_or_fld  output this tag or field value as a column.
+    tag_or_fld  output this tag or field value as a column.
 
-		only records that have all the specified columns will be output.
+    only records that have all the specified columns will be output.
 
-		if no tag_or_fld is specified, the program will output a summary over
-		all records that match the filter.  The summary contains a histogram
-        of all tags and their values, as well as the measurements and the record types,
-        as defined by the set of fields they contain.
+    if no tag_or_fld is specified, the program will output a summary over
+    all records that match the filter.  The summary contains a histogram
+    of all tags and their values, as well as the measurements and the record types,
+    as defined by the set of fields they contain.
 
-        No more than 19 values of each tag are shown
+    No more than 19 values of each tag are shown
 
-Examples:
+## Examples:
 
-Produce a summary over all records that have a tag 'trid' starting with ~PULSE
+### Produce a summary over all records that have a tag 'trid' starting with ~PULSE
+
 ```
 Luuk-van-Dijks-MacBook-Pro:outflux lvd$ gzcat ../dees/data/20240807111458/data.log.gz  | ./outflux trid~PULSE
 outflux:processed 138231 of 3677327 records.
@@ -54,7 +55,9 @@ trid:
 outflux:Processed 967617 records in 2.750044167s
 ```
 
-Print a histogram of all trid values for fields that have a srcid tag:
+### Print a histogram of all trid values for fields that have a srcid tag:
+
+```
 Luuk-van-Dijks-MacBook-Pro:outflux lvd$ gzcat ../dees/data/20240807111458/data.log.gz  | ./outflux srcid= trid | sort | uniq -c
 outflux:skipping record 3677328:tag at line 3677332:36: expected field key but none found
 outflux:processed 2839762 of 3677327 records.
@@ -77,7 +80,8 @@ outflux:Processed 2839762 records in 2.883718084s
 4390 VDD
 ```
 
-Print us, x, y, z fields of all ACCEL_ records from port 4
+### Print us, x, y, z fields of all ACCEL_ records from port 4
+
 ```
 Luuk-van-Dijks-MacBook-Pro:outflux lvd$ go build &&  gzcat ../dees/data/20240807111458/data.log.gz  | ./outflux port=2 trid~ACCEL_ us x y z trid 
 #us x y z trid
@@ -94,7 +98,8 @@ Luuk-van-Dijks-MacBook-Pro:outflux lvd$ go build &&  gzcat ../dees/data/20240807
 ```
 
 
-Produce a summary over all records that have a tag 'trid' starting with ~PULSE
+### Produce a summary over all records that have a tag 'trid' starting with ~PULSE
+
 ```
 Luuk-van-Dijks-MacBook-Pro:outflux lvd$ go build &&  gzcat ../dees/data/20240807111458/data.log.gz  | ./outflux trid~PULSE us count | head
 outflux:processed 138231 of 3677327 records.
@@ -120,7 +125,8 @@ outflux:Processed 967617 records in 2.750044167s
 ```
 
 
-Produce a summary over all records
+### Produce a summary over all records
+
 ```
 Luuk-van-Dijks-MacBook-Pro:outflux lvd$  gzcat ../dees/data/20240807111458/data.log.gz  | ./outflux
  gzcat ../dees/data/20240807111458/data.log.gz  | ./outflux
