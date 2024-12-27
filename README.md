@@ -99,32 +99,6 @@ $ gzcat ../dees/data/20240807111458/data.log.gz  | ./outflux port=2 trid~ACCEL_ 
 ....
 ```
 
-### Produce a summary over all records that have a tag 'trid' starting with ~PULSE
-
-```
-$ gzcat ../dees/data/20240807111458/data.log.gz  | ./outflux trid~PULSE us count | head
-
-outflux:processed 138231 of 3677327 records.
-MEASUREMENTS:
-	 138231 debug
-RECORD TYPES:
-	 133848 count,d,stamp,us
-	   4383 hz
-port:
-	   4383 0
-	 133848 4
-session:
-	 138231 raspberrypi
-srcid:
-	   4383 0
-	 133848 23
-start:
-	 138231 20240807111459.330071510
-trid:
-	  69115 PULSEFALL
-	  69116 PULSERAISE
-outflux:Processed 967617 records in 2.750044167s
-```
 
 ### Produce a summary over all records
 
