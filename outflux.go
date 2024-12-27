@@ -5,7 +5,7 @@ Outflux is a tool to extract rows and columns from a influxdb line protocol form
 
 Usage
 
-	outflux [-s] [-m measurement] [tag=[val]]... [tag_or_fld [tag_or_fld]...]
+	outflux [-m measurement] [tag=[val]]... [tag_or_fld [tag_or_fld]...]
 
 		tag=val   only process records that contain this tag with this value.
 		tag=      only process records that contain this tag, irrespective of value
@@ -17,6 +17,8 @@ Usage
 
 		if no tag_or_fld is specified, the program will output a summary over
 		all records that match the filter
+
+		TODO the influxdb timestamps are ignored because they're not really meaningful in our datasets.
 */
 package main
 
@@ -27,6 +29,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math"
 	"os"
 	"sort"
 	"strings"
@@ -39,6 +42,8 @@ var (
 	fMeasurement = flag.String("m", "", "only output records from this measurement (the prefix of each lineprotocol record)")
 	fCSV         = flag.Bool("csv", false, "output comma separated values (default space)")
 	fTSV         = flag.Bool("tsv", false, "output tab separated values (default space)")
+	fSkip        = flag.Uint("skip", 0, "discard this many records from the begining of the output")
+	fLim         = flag.Uint("lim", math.MaxUint, "limit output to this many records ")
 )
 
 func newWriter(f io.Writer) *csv.Writer {
@@ -336,8 +341,17 @@ func main() {
 		os.Stdout.WriteString("#")
 		w.Write(args)
 		for values := range Select(filter, pfxes, args, os.Stdin) {
-			N++
+			if *fSkip > 0 {
+				*fSkip--
+				continue
+			}
+
 			w.Write(values)
+			N++
+			if *fLim--; *fLim == 0 {
+				break
+			}
+
 		}
 		w.Flush()
 		if err := w.Error(); err != nil {
