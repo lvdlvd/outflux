@@ -244,6 +244,11 @@ func main() {
 	log.SetPrefix("outflux:")
 	log.SetFlags(log.Lmsgprefix)
 
+	flag.Usage = func() {
+		fmt.Fprintf(flag.CommandLine.Output(), "Usage: %s [flags] [-m measurement] [tag=[val]]... [tag_or_fld [tag_or_fld]...]  < influxdb.log\n", os.Args[0])
+		flag.PrintDefaults()
+	}
+
 	flag.Parse()
 
 	var (

@@ -1,13 +1,14 @@
 # outflux
 
 Outflux is a tool to extract rows and columns from a influxdb line protocol formatted file
+on stdin.
 
 	https://docs.influxdata.com/influxdb/v1/write_protocols/line_protocol_tutorial/
 
 Usage
 
 ```
-	outflux [-csv|-tsv] [-m measurement] [tag=[val]]... [tag_or_fld [tag_or_fld]...]
+	outflux [-csv|-tsv] [-m measurement] [tag=[val]]... [tag_or_fld [tag_or_fld]...] < influxdb.log
 ```
 
 Where
