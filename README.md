@@ -57,7 +57,7 @@ trid:
 outflux:Processed 967617 records in 2.750044167s
 ```
 
-### Print a histogram of all trid values for fields that have a srcid tag:
+### Print a histogram of all trid values for records that have a srcid tag:
 
 ```
 $ gzcat ../dees/data/20240807111458/data.log.gz  | ./outflux srcid= trid | sort | uniq -c
