@@ -1,11 +1,11 @@
 /*
-Outflux is a tool to extract rows and columns from a influxdb line protocol formatted file
+Outflux extracts rows and columns from a influxdb line protocol formatted file
 
 	https://docs.influxdata.com/influxdb/v1/write_protocols/line_protocol_tutorial/
 
 Usage
 
-	outflux [-m measurement] [tag=[val]]... [tag_or_fld [tag_or_fld]...]
+	outflux [-csv|-tsv] [-m measurement] [tag=[val]]... [tag_or_fld [tag_or_fld]...]  < influx.db > outfile.csv
 
 		tag=val   only process records that contain this tag with this value.
 		tag=      only process records that contain this tag, irrespective of value
@@ -147,7 +147,7 @@ func Select(tags map[string]string, pfixes map[string]bool, fields []string, r i
 		if err := dec.Err(); err != nil {
 			log.Println(err)
 		}
-		log.Printf("processed %d of %d records.", n, recno-1)
+		log.Printf("read %d of %d records.", n, recno-1)
 	}()
 	return ch
 }
@@ -234,7 +234,7 @@ func Summary(tags map[string]string, pfixes map[string]bool, r io.Reader) <-chan
 		if err := dec.Err(); err != nil {
 			log.Println(err)
 		}
-		log.Printf("processed %d of %d records.", n, recno-1)
+		log.Printf("read %d of %d records.", n, recno-1)
 	}()
 	return ch
 }
@@ -365,6 +365,6 @@ func main() {
 
 	}
 
-	log.Printf("Processed %d records in %v", N, time.Now().Sub(start))
+	log.Printf("wrote %d records in %v", N, time.Now().Sub(start))
 
 }
