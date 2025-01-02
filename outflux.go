@@ -39,11 +39,12 @@ import (
 )
 
 var (
-	fMeasurement = flag.String("m", "", "only output records from this measurement (the prefix of each lineprotocol record)")
-	fCSV         = flag.Bool("csv", false, "output comma separated values (default space)")
-	fTSV         = flag.Bool("tsv", false, "output tab separated values (default space)")
-	fSkip        = flag.Uint("skip", 0, "discard this many records from the begining of the output")
-	fLim         = flag.Uint("lim", math.MaxUint, "limit output to this many records ")
+	fMeasurement = flag.String("m", "", "only output records from this measurement (the prefix of each lineprotocol record).")
+	fCSV         = flag.Bool("csv", false, "output comma separated values (default space).")
+	fTSV         = flag.Bool("tsv", false, "output tab separated values (default space).")
+	fSkip        = flag.Uint("skip", 0, "discard this many records from the begining of the output.")
+	fLim         = flag.Uint("lim", math.MaxUint, "limit output to this many records.")
+	fDec         = flag.Uint("dec", 0, "decimate, skip this many records before outputing one.")
 )
 
 func newWriter(f io.Writer) *csv.Writer {
@@ -342,6 +343,8 @@ func main() {
 
 	} else {
 
+		dec := *fDec
+
 		w := newWriter(os.Stdout)
 		os.Stdout.WriteString("#")
 		w.Write(args)
@@ -350,12 +353,16 @@ func main() {
 				*fSkip--
 				continue
 			}
-
+			if dec > 0 {
+				dec--
+				continue
+			}
 			w.Write(values)
 			N++
 			if *fLim--; *fLim == 0 {
 				break
 			}
+			dec = *fDec
 
 		}
 		w.Flush()
