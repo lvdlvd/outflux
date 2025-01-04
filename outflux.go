@@ -13,12 +13,14 @@ Usage
 
 		tag_or_fld  output this tag or field value as a column.
 
-		only records that have all the specified columns will be output.
+	Only records that have all the specified columns will be output.
 
-		if no tag_or_fld is specified, the program will output a summary over
-		all records that match the filter
+	If no tag_or_fld is specified, the program will output a summary over
+	all records that match the filter.
 
-		TODO the influxdb timestamps are ignored because they're not really meaningful in our datasets.
+	Special field names:
+
+		_s  timestamp in decimal seconds since first record
 */
 package main
 
@@ -32,6 +34,7 @@ import (
 	"math"
 	"os"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 
@@ -68,6 +71,7 @@ func Select(tags map[string]string, pfixes map[string]bool, fields []string, r i
 			dec      = lineprotocol.NewDecoder(r)
 			n        = 0
 			recno    = 0
+			first    time.Time
 		)
 
 		if *fMeasurement != "" {
@@ -77,6 +81,8 @@ func Select(tags map[string]string, pfixes map[string]bool, fields []string, r i
 		for i, v := range fields {
 			fieldidx[v] = i
 		}
+
+		_, wanttime := fieldidx["_s"]
 
 		for dec.Next() {
 			recno++
@@ -135,6 +141,20 @@ func Select(tags map[string]string, pfixes map[string]bool, fields []string, r i
 					values[idx] = string(val)
 					flds++
 				}
+			}
+
+			if wanttime {
+				t, err := dec.Time(lineprotocol.Nanosecond, time.Time{})
+				if err != nil {
+					log.Printf("skipping record %d:bad timestamp %v", recno, err)
+					continue
+				}
+				if first.IsZero() {
+					first = t
+				}
+				d := float64(t.Sub(first)) / float64(time.Second)
+				values[fieldidx["_s"]] = strconv.FormatFloat(d, 'f', 9, 64)
+				flds++
 			}
 
 			if sat != len(tags) || flds != len(fields) {
