@@ -1,39 +1,40 @@
 # outflux
 
-Outflux is a tool to extract rows and columns from a influxdb line protocol formatted file
-on stdin.
+Outflux extracts rows and columns from a influxdb line protocol formatted file
 
-	https://docs.influxdata.com/influxdb/v1/write_protocols/line_protocol_tutorial/
+	https://docs.influxdata.com/influxdb/v2/reference/syntax/line-protocol/
 
 Usage
 
 ```
-	outflux [-csv|-tsv] [-m measurement] [tag=[val]]... [tag_or_fld [tag_or_fld]...] < influxdb.log
+	outflux [-csv|-tsv] [-m measurement] [tag=[val]]... [tag_or_fld [tag_or_fld]...]  < influx.db > outfile.csv
 ```
 
-Where
+		tag=val   only process records that contain this tag with this value.
+		tag=      only process records that contain this tag, irrespective of value
+		tag~pfx   only process records that contain this tag with a value that has this prefix
 
-    tag=val   only process records that contain this tag with this value.
-    tag=      only process records that contain this tag, irrespective of value
-    tag~pfx   only process records that contain this tag with a value that has this prefix
+		tag_or_fld  output this tag or field value as a column.
 
-    tag_or_fld  output this tag or field value as a column.
+	Special field names:
 
-    only records that have all the specified columns will be output.
+		_s  timestamp in decimal seconds since first record
 
-    if no tag_or_fld is specified, the program will output a summary over
-    all records that match the filter.  The summary contains a histogram
+	Only records that have all the specified columns will be output.
+
+	If no tag_or_fld is specified, the program will output a summary over
+	all records that match the filter.  The summary contains a histogram
     of all tags and their values, as well as the measurements and the record types,
     as defined by the set of fields they contain.
-
-    No more than 19 values of each tag are shown
+	
+	No more than 19 values of each tag are shown.
 
 ## Examples:
 
 ### Produce a summary over all records that have a tag 'trid' starting with ~PULSE
 
 ```
-$ gzcat ../dees/data/20240807111458/data.log.gz  | ./outflux trid~PULSE
+$ gzcat data.log.gz  | outflux trid~PULSE
 
 outflux:processed 138231 of 3677327 records.
 MEASUREMENTS:
@@ -60,7 +61,7 @@ outflux:Processed 967617 records in 2.750044167s
 ### Print a histogram of all trid values for records that have a srcid tag:
 
 ```
-$ gzcat ../dees/data/20240807111458/data.log.gz  | ./outflux srcid= trid | sort | uniq -c
+$ gzcat data.log.gz  | outflux srcid= trid | sort | uniq -c
 
 outflux:processed 2839762 of 3677327 records.
 outflux:Processed 2839762 records in 2.883718084s
@@ -85,7 +86,7 @@ outflux:Processed 2839762 records in 2.883718084s
 ### Print us, x, y, z fields of all ACCEL_ records from port 4
 
 ```
-$ gzcat ../dees/data/20240807111458/data.log.gz  | ./outflux port=2 trid~ACCEL_ us x y z trid 
+$ gzcat data.log.gz  | outflux port=2 trid~ACCEL_ us x y z trid 
 
 #us x y z trid
 0 -1.0073547 0.07662964 -0.0026550293 ACCEL_3G
@@ -104,7 +105,7 @@ $ gzcat ../dees/data/20240807111458/data.log.gz  | ./outflux port=2 trid~ACCEL_ 
 ### Produce a summary over all records
 
 ```
-$  gzcat ../dees/data/20240807111458/data.log.gz  | ./outflux
+$  gzcat data.log.gz  | outflux
 
 2024/12/27 01:18:20 output 3677328 of 3677327 records.
 MEASUREMENTS:
