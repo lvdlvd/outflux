@@ -83,7 +83,7 @@ outflux:Processed 2839762 records in 2.883718084s
 4390 VDD
 ```
 
-### Print us, x, y, z fields of all ACCEL_ records from port 4
+### Print us, x, y, z fields of all ACCEL_ records from port 2
 
 ```
 $ gzcat data.log.gz  | outflux port=2 trid~ACCEL_ us x y z trid 
